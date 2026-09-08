@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>西班牙 11 天自由行手冊 (2027)</title>
+  <style>
+    :root {
+      --bg-color: #f8f9fa;
+      --card-bg: #ffffff;
+      --text-main: #1f2937;
+      --text-sub: #4b5563;
+      --accent-color: #c0392b;
+      --accent-light: #fbeee1;
+      --border-color: #e5e7eb;
+      --map-bg: #f3f4f6;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-color: #111827;
+        --card-bg: #1f2937;
+        --text-main: #f9fafb;
+        --text-sub: #9ca3af;
+        --accent-color: #e74c3c;
+        --accent-light: #372827;
+        --border-color: #374151;
+        --map-bg: #111827;
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+      }
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      padding: 12px;
+      padding-bottom: 40px;
+      line-height: 1.5;
+    }
+
+    .container { max-width: 600px; margin: 0 auto; }
+    
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent-color);
+    }
+
+    /* 頂部倒數卡片 */
+    .hero-card {
+      background: linear-gradient(135deg, #c0392b, #8e44ad);
+      color: #ffffff;
+      border: none;
+      text-align: center;
+      padding: 20px 16px;
+    }
+    .hero-next-event { font-size: 0.9rem; opacity: 0.9; margin-bottom: 6px; }
+    .countdown-timer {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      font-mono: monospace;
+      margin: 8px 0;
+    }
+    .hero-target-time { font-size: 0.8rem; opacity: 0.8; }
+
+    /* 地圖與 SVG */
+    .svg-map-container {
+      width: 100%;
+      background: var(--map-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+    }
+    svg { width: 100%; height: auto; display: block; }
+
+    /* 按鈕與連結 */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: var(--accent-color);
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 8px;
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+    }
+    .btn-sm { padding: 4px 8px; font-size: 0.75rem; width: auto; }
+
+    /* 已確認預訂 */
+    .booking-item {
+      border-bottom: 1px solid var(--border-color);
+      padding: 10px 0;
+    }
+    .booking-item:last-child { border-bottom: none; }
+    .booking-header { display: flex; justify-content: space-between; font-weight: 600; font-size: 0.95rem; }
+    .booking-detail { font-size: 0.85rem; color: var(--text-sub); margin-top: 4px; }
+    .nav-link { color: var(--accent-color); text-decoration: none; font-weight: 600; }
+
+    /* 逐日行程Timeline */
+    .day-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed var(--border-color);
+    }
+    .day-title { font-size: 1.05rem; font-weight: 700; }
+    .day-map-toggle { font-size: 0.8rem; color: var(--accent-color); }
+    .timeline { margin-top: 12px; position: relative; padding-left: 20px; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 6px;
+      top: 4px;
+      bottom: 4px;
+      width: 2px;
+      background: var(--border-color);
+    }
+    .timeline-item { position: relative; margin-bottom: 14px; }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -18px;
+      top: 6px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-color);
+    }
+    .timeline-time { font-size: 0.75rem; font-weight: 700; color: var(--accent-color); }
+    .timeline-content { font-size: 0.9rem; color: var(--text-main); }
+    .badge-ticket {
+      display: inline-block;
+      background: #e74c3c;
+      color: #fff;
+      font-size: 0.7rem;
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-left: 4px;
+    }
+
+    /* 待辦清單純列表 */
+    .todo-list { list-style: square; padding-left: 20px; font-size: 0.9rem; color: var(--text-main); }
+    .todo-list li { margin-bottom: 6px; }
+
+    /* 折疊控制 */
+    .collapsible-content { display: none; margin-top: 10px; }
+    .collapsible-content.active { display: block; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- 1. 頂部此刻關注卡片 -->
+  <div class="card hero-card">
+    <div class="hero-next-event" id="nextEventName">距離啟程：台北 TPE ➔ 馬德里 MAD</div>
+    <div class="countdown-timer" id="timerDisplay">00天 00時 00分 00秒</div>
+    <div class="hero-target-time">目標時間：2027-02-02 18:35 (GMT+8)</div>
+  </div>
+
+  <!-- 2. 行程總覽地圖 -->
+  <div class="card">
+    <div class="card-title">🗺️ 行程總覽路線圖</div>
+    <div class="svg-map-container">
+      <svg viewBox="0 0 500 350">
+        <!-- 背景底色 -->
+        <rect width="500" height="350" fill="none"/>
+        
+        <!-- 手繪路徑線 -->
+        <!-- Madrid -> Toledo (D2 藍) -->
+        <path d="M 220,180 L 195,225" stroke="#3498db" stroke-width="4" stroke-dasharray="6,4" fill="none"/>
+        <!-- Toledo -> Madrid (D3 綠) -->
+        <path d="M 195,225 L 220,180" stroke="#2ecc71" stroke-width="3" stroke-dasharray="4,4" fill="none"/>
+        <!-- Madrid -> Barcelona (D5 紫) -->
+        <path d="M 220,180 Q 320,120 410,110" stroke="#9b59b6" stroke-width="4" stroke-dasharray="6,4" fill="none"/>
+        <!-- Barcelona -> Madrid (D8 橘) -->
+        <path d="M 410,110 Q 310,150 220,180" stroke="#e67e22" stroke-width="3" stroke-dasharray="4,4" fill="none"/>
+
+        <!-- 地點標籤與節點 -->
+        <!-- 馬德里 Madrid -->
+        <circle cx="220" cy="180" r="8" fill="#e74c3c" />
+        <text x="220" y="165" font-size="14" font-weight="bold" text-anchor="middle" fill="#c0392b">馬德里 Madrid</text>
+        <text x="220" y="200" font-size="10" text-anchor="middle" fill="#555">(住3晚)</text>
+
+        <!-- 托雷多 Toledo -->
+        <circle cx="195" cy="225" r="7" fill="#3498db" />
+        <text x="195" y="245" font-size="12" font-weight="bold" text-anchor="middle" fill="#2980b9">托雷多 Toledo</text>
+        <text x="195" y="258" font-size="10" text-anchor="middle" fill="#555">(住1晚 Parador)</text>
+
+        <!-- 巴塞隆納 Barcelona -->
+        <circle cx="410" cy="110" r="7" fill="#9b59b6" />
+        <text x="410" y="95" font-size="12" font-weight="bold" text-anchor="middle" fill="#8e44ad">巴塞隆納 Barcelona</text>
+        <text x="410" y="128" font-size="10" text-anchor="middle" fill="#555">(住3晚 Regina)</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 3. 已確認預訂項 -->
+  <div class="card">
+    <div class="card-title">✈️ 機票 / 租車 / 酒店資訊</div>
+    
+    <div class="booking-item">
+      <div class="booking-header"><span>去程航班 (CX473 ➔ CX315)</span><span class="nav-link">國泰航空</span></div>
+      <div class="booking-detail">2027/02/02 18:35 TPE ➔ 08:30 (+1d) MAD</div>
+    </div>
+
+    <div class="booking-item">
+      <div class="booking-header"><span>回程航班 (CX372 ➔ CX530)</span><span class="nav-link">國泰航空</span></div>
+      <div class="booking-detail">2027/02/10 11:25 MAD ➔ 11:00 (+1d) TPE</div>
+    </div>
+
+    <div class="booking-item">
+      <div class="booking-header"><span>D1 住宿：Parador de Toledo</span></div>
+      <div class="booking-detail">📍 Cerro del Emperador, s/n, 45002 Toledo, 西班牙</div>
+      <a href="https://www.google.com/maps/search/?api=1&query=Parador+de+Toledo" target="_blank" class="btn btn-outline btn-sm" style="margin-top:4px;">🗺️ 地圖導航</a>
+    </div>
+
+    <div class="booking-item">
+      <div class="booking-header"><span>D2-D3 & D8 住宿：Hotel Sardinero Madrid</span></div>
+      <div class="booking-detail">📍 Plaza de Alonso Martínez, 3, Chamberí, 28004 Madrid, 西班牙</div>
+      <a href="https://www.google.com/maps/search/?api=1&query=Hotel+Sardinero+Madrid" target="_blank" class="btn btn-outline btn-sm" style="margin-top:4px;">🗺️ 地圖導航</a>
+    </div>
+
+    <div class="booking-item">
+      <div class="booking-header"><span>D4-D7 住宿：HOTEL REGINA BARCELONA</span></div>
+      <div class="booking-detail">📍 Carrer de Bergara, 4, Eixample, 08002 Barcelona, 西班牙</div>
+      <a href="https://www.google.com/maps/search/?api=1&query=HOTEL+REGINA+BARCELONA" target="_blank" class="btn btn-outline btn-sm" style="margin-top:4px;">🗺️ 地圖導航</a>
+    </div>
+  </div>
+
+  <!-- 4. 逐日行程 -->
+  <div class="card">
+    <div class="card-title">📅 逐日詳細行程</div>
+
+    <!-- Day 1 -->
+    <div style="margin-bottom: 20px;">
+      <div class="day-header" onclick="toggleCollapsible('day1Map')">
+        <div class="day-title">Day 1 | 2027/02/02 (二) 啟程赴西班牙</div>
+        <div class="day-map-toggle">🗺️ 展開路線</div>
+      </div>
+      <div id="day1Map" class="collapsible-content">
+        <a href="https://www.google.com/maps/dir/?api=1&destination=TPE+Airport" target="_blank" class="btn btn-sm">開啟全天多點導航</a>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-time">18:35</div>
+          <div class="timeline-content">CX473 桃園機場 (TPE) 起飛 ➔ 20:40 抵達香港 (HKG)</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-time">20:40</div>
+          <div class="timeline-content">香港機場貴賓室休息與洗澡</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Day 2 -->
+    <div style="margin-bottom: 20px;">
+      <div class="day-header" onclick="toggleCollapsible('day2Map')">
+        <div class="day-title">Day 2 | 2027/02/03 (三) 抵達馬德里 ➔ Toledo 古城</div>
+        <div class="day-map-toggle">🗺️ 展開路線</div>
+      </div>
+      <div id="day2Map" class="collapsible-content">
+        <a href="https://www.google.com/maps/dir/?api=1&origin=Adolfo+Su%C3%A1rez+Madrid%E2%80%93Barajas+Airport&destination=Parador+de+Toledo" target="_blank" class="btn btn-sm">開啟當天全天多點導航 (車程約 1hr)</a>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-time">00:40 - 08:30</div>
+          <div class="timeline-content">CX315 香港 ➔ 馬德里 (MAD 4S 航廈)</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-time">08:30 - 09:30</div>
+          <div class="timeline-content">入境、機場取車自駕前往 Toledo (約 1 小時車程)</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-time">下午</div>
+          <div class="timeline-content"><a href="https://www.google.com/maps/search/?api=1&query=Toledo+Old+Town" class="nav-link" target="_blank">Toledo 古城漫遊</a>、入住 Parador de Toledo</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Day 3 -->
+    <div style="margin-bottom: 20px;">
+      <div class="day-header" onclick="toggleCollapsible('day3Map')">
+        <div class="day-title">Day 3 | 2027/02/04 (四) Toledo ➔ 馬德里還車</div>
+        <div class="day-map-toggle">🗺️ 展開路線</div>
+      </div>
+      <div id="day3Map" class="collapsible-content">
+        <a href="https://www.google.com/maps/dir/?api=1&origin=Parador+de+Toledo&destination=Hotel+Sardinero+Madrid" target="_blank" class="btn btn-sm">開啟導航返回馬德里</a>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-time">上午</div>
+          <div class="timeline-content">Toledo 古城景點探索與退房</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-time">下午</div>
+          <div class="timeline-content">自駕返回馬德里市區還車 ➔ 入住 Hotel Sardinero Madrid</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Day 4 -->
+    <div style="margin-bottom: 20px;">
+      <div class="day-header">
+        <div class="day-title">Day 4 | 2027/02/05 (五) 馬德里市區 (除夕)</div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-time">全天</div>
+          <div class="timeline-content">馬德里市區巡禮（普拉多美術館<span class="badge-ticket">需預約</span>、主廣場、皇宮）</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Day 5 -->
+    <div style="margin-bottom: 20px;">
+      <div class="day-header">
+        <div class="day-title">Day 5 | 2027/02/06 (六) 馬德里 ➔ 巴塞隆納 (初一)</div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-time">下午</div>
+          <div class="timeline-content">搭乘高鐵火車 (約3小時) 前往巴塞隆納 ➔ 入住 HOTEL REGINA BARCELONA</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Day 6-7 -->
+    <div style="margin-bottom: 20px;">
+      <div class="day-header">
+        <div class="day-title">Day 6-7 | 2027/02/07-08 巴塞隆納建築探索</div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-time">全天</div>
+          <div class="timeline-content">聖家堂 <span class="badge-ticket">需提前訂票</span>、奎爾公園 <span class="badge-ticket">需提前訂票</span>、巴特婁之家</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Day 8 -->
+    <div style="margin-bottom: 20px;">
+      <div class="day-header">
+        <div class="day-title">Day 8 | 2027/02/09 (二) 巴塞隆納 ➔ 馬德里</div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-time">下午</div>
+          <div class="timeline-content">搭乘高鐵返回馬德里 ➔ 入住 Hotel Sardinero Madrid</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Day 9-11 -->
+    <div>
+      <div class="day-header">
+        <div class="day-title">Day 9-11 | 2027/02/10-11 返台</div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-time">02/10 09:00</div>
+          <div class="timeline-content">抵達馬德里機場 (MAD 4S)辦理退稅</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-time">02/10 11:25</div>
+          <div class="timeline-content">CX372 起飛 ➔ 02/11 11:00 抵達台北 (TPE)</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 5. 待辦清單 (純列表) -->
+  <div class="card">
+    <div class="card-title">📝 待辦清單</div>
+    <ul class="todo-list">
+      <li>預訂馬德里至巴塞隆納往返高鐵火車票 (Renfe / Iryo / Ouigo)</li>
+      <li>預訂聖家堂 (Sagrada Família) 入場與登塔門票</li>
+      <li>預訂奎爾公園 (Park Güell) 門票</li>
+      <li>預訂普拉多美術館門票</li>
+      <li>辦理申根保險與國際駕照 (自駕駕駛)</li>
+      <li>準備歐元現金與開通海外刷卡回饋信用卡</li>
+    </ul>
+  </div>
+
+  <!-- 6. 實用貼士 -->
+  <div class="card">
+    <div class="card-title">💡 實用貼士</div>
+    <div style="font-size: 0.85rem; color: var(--text-sub); line-height: 1.6;">
+      <p>🚨 <strong>緊急電話：</strong> 歐洲通用緊急號碼 112</p>
+      <p>💶 <strong>退稅提示：</strong> 西班牙無最低退稅門檻，認明 DIVA 標誌，離境時在馬德里機場 4S 航廈機器掃碼辦理。</p>
+      <p>⚠️ <strong>防小偷：</strong> 巴塞隆納蘭布拉大道、聖家堂周邊及地鐵站請格外注意隨身包包。</p>
+      <p>🔌 <strong>插頭標準：</strong> 雙圓孔歐規插頭 (230V, 50Hz)。</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // 動態倒數計時器 (帶時區)
+  function updateCountdown() {
+    // 目標時間：2027-02-02 18:35:00 UTC+8
+    const targetDate = new Date("2027-02-02T18:35:00+08:00").getTime();
+    const now = new Date().getTime();
+    const diff = targetDate - now;
+
+    if (diff <= 0) {
+      document.getElementById("timerDisplay").innerText = "行程進行中 / 已結束";
+      return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    const pad = (n) => n.toString().padStart(2, '0');
+    document.getElementById("timerDisplay").innerText = 
+      `${days}天 ${pad(hours)}時 ${pad(minutes)}分 ${pad(seconds)}秒`;
+  }
+
+  setInterval(updateCountdown, 1000);
+  updateCountdown();
+
+  // 折疊路線圖切換
+  function toggleCollapsible(id) {
+    const el = document.getElementById(id);
+    if (el.classList.contains('active')) {
+      el.classList.remove('active');
+    } else {
+      el.classList.add('active');
+    }
+  }
+</script>
+
+</body>
+</html>
